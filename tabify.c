@@ -14,9 +14,6 @@
 
 #include "growbuf.h"
 
-//#define DEBUG if (false)
-#define DEBUG
-
 #define CHECK_GROWBUF(gb) if (NULL == (gb)) { fprintf(stderr, "malloc failed!\n"); goto cleanup; }
 
 void read_fields(growbuf *fields, growbuf *field_lengths, const char *filename)
