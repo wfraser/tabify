@@ -30,26 +30,27 @@ void read_fields(growbuf *fields, growbuf *field_lengths, const char *filename)
     }
 
     growbuf *row      = growbuf_create(10);
+    growbuf *current  = growbuf_create(10);
     size_t   colnum   = 0;
     bool     eof_seen = false;
 
+    CHECK_GROWBUF(current)
     CHECK_GROWBUF(row)
 
     do { // iterate over rows
-        growbuf *current = NULL;
-        
-        current = growbuf_create(10);
-        CHECK_GROWBUF(current)
 
         while (1) { // iterate over columns
             int c = fgetc(in);
             
             if (c == EOF) {
                 eof_seen = true;
-                break;
+
+                if (current->size == 0) {
+                    break;
+                }
             }
 
-            if ((char)c == '\t' || (char)c == '\n') {
+            if ((char)c == '\t' || (char)c == '\n' || eof_seen) { 
                 growbuf_append_byte(current, '\0');
 
                 // update length
@@ -79,7 +80,7 @@ void read_fields(growbuf *fields, growbuf *field_lengths, const char *filename)
                 current = growbuf_create(10);
                 CHECK_GROWBUF(current)
 
-                if ((char)c == '\n') {
+                if ((char)c == '\n' || eof_seen) {
                     //
                     // append current row to fields
                     //
@@ -98,7 +99,14 @@ void read_fields(growbuf *fields, growbuf *field_lengths, const char *filename)
     } while (!eof_seen);
 
 cleanup:
-    ;
+    if (row->size == 0) {
+        growbuf_free(row);
+    }
+    if (current->size == 0) {
+        growbuf_free(current);
+    }
+
+    fclose(in);
 }
 
 void print_fields(growbuf *fields, growbuf *field_lengths)
