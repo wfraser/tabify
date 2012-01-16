@@ -54,7 +54,7 @@ void read_fields(growbuf *fields, growbuf *field_lengths, const char *filename)
                 growbuf_append_byte(current, '\0');
 
                 // update length
-                if (colnum > growbuf_num_elems(field_lengths, size_t)) {
+                if (colnum >= growbuf_num_elems(field_lengths, size_t)) {
                     //
                     // append a length.
                     //
