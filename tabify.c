@@ -60,7 +60,7 @@ void add_field(size_t rownum, size_t colnum, growbuf *field, growbuf *fields, gr
 
 void read_fields(growbuf *fields, growbuf *field_lengths, FILE *in)
 {
-    growbuf *current  = growbuf_create(10);
+    growbuf *current  = growbuf_create(GB_INIT);
     size_t   rownum   = 0;
     size_t   colnum   = 0;
     bool     eof_seen = false;
@@ -187,8 +187,8 @@ int main(int argc, char **argv)
         }
     }
 
-    fields = growbuf_create(10);
-    field_lengths = growbuf_create(10);
+    fields = growbuf_create(GB_INIT);
+    field_lengths = growbuf_create(GB_INIT);
     if (NULL == fields || NULL == field_lengths) {
         fprintf(stderr, "failed to allocate growbuf\n");
         retval = EX_OSERR;
