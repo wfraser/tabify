@@ -1,7 +1,7 @@
 CFLAGS = -std=c1x -pedantic
 CC     = gcc
 
-OBJS   = tabify.o growbuf.o
+OBJS   = tabify.o growbuf.o csvformat.o
 
 all: tabify
 
